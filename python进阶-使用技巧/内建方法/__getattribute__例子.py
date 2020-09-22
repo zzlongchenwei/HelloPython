@@ -35,7 +35,7 @@ class Itcast(object):
         print('this is Itcast')
 
 
-s = Itcast("python")
+s = Itcast("python")             # 传入"python"是因为 __init__() required positional argument: 'subject1'
 print(s.subject1)
 print(s.subject2)
 
