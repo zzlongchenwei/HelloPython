@@ -1,4 +1,4 @@
-//2-2习题
+#2-2习题
 
 message = "hello , zzlong"
 print(message)

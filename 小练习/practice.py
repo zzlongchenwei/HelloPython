@@ -1,5 +1,5 @@
-//一次小练习 
-//测试
+# //一次小练习
+# //测试
 print("HELLO WORLD")
 flag = 1
 word = ""
