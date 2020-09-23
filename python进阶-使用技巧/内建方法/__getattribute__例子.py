@@ -27,7 +27,7 @@ class Itcast(object):
             print('log subject1')
             return 'redirect python'
         else:  # 测试时注释掉这2行，将找不到subject
-            temp = object.__getattribute__(self, obj)
+            temp = object.__getattribute__(self, obj)    # obj --> "subject2"
             print("===2>%s" % str(temp))
             return temp
 

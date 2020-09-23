@@ -29,4 +29,4 @@ class TestDesc(object):
 # 以下为测试代码
 t = TestDesc()
 t.x
-t.y
+t.y                 # y不会被打印
