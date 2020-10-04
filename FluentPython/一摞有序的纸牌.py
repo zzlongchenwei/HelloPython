@@ -25,6 +25,7 @@ class FrenchDeck:
         return len(self._cards)
 
     def __getitem__(self, position):  # __getitem__方法让该类变成可迭代的
+        # 可以通过实例对象的key访问value ,例：deck[0]就会调用类中__getitem__方法
         return self._cards[position]
 
 
