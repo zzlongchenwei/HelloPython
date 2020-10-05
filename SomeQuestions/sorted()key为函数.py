@@ -7,6 +7,7 @@
 """
 
 lis = [1, 2, 3, 0, 1, 9, 8]
+# sorted(iterable, key=None, reverse=False)  一个可迭代对象
 print(sorted(range(len(lis)), key=lambda k: lis[k]))
 # range(len(lis)) = [0, 1, 2, 3, 4, 5, 6]
 # 0 :lis[0] = 1
