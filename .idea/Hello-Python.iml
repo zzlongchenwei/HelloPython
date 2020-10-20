@@ -5,9 +5,10 @@
       <sourceFolder url="file://$MODULE_DIR$/小项目/项目1：自动添加标签" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/little_projects/projetc1/1.1markup" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/little_projects/projetc1/1.2markup" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/GenerationAlgorithm" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (Hello-Python)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
