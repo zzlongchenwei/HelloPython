@@ -39,14 +39,20 @@ class Population:
                 break
         return DNAl
 
-    def produce_pop(self):
-        # 产生二进制初始种群
+    def produce_bpop(self):
+        # 产生二进制编码初始种群
         DNA = []
         for i in range(self.pop_size):
             for j in range(self.DNAlen):
                 DNA.append(random.randint(0, 1))
             self.pop.append(DNA)
             DNA = []
+
+    def produce_rpop(self):
+        # 产生实数编码种群
+        for i in range(self.pop_size):
+            self.pop.append(random.randint(self.interval[0],self.interval[-1]))
+
 
     def update_pop(self):
         # 更新种群
