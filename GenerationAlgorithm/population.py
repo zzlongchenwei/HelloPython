@@ -6,38 +6,15 @@
 @file:Population.py
 """
 import random
+from selection import Selection
+from genetic_operators import GenOperators
 
 
-class Population:
+class Population(Selection, GenOperators):
     """
-    种群的构建
-    种群的编码方式
-    resolution 要求的精度，小数点后几位，（默认为1，小数点后0位）
-    interval 取值区间
+    种群的生成 produce_bpop()  produce_rpop()
+    种群的更新 update_pop()
     """
-    def __init__(self, pop_size, interval, resolution=0):
-
-        self.pop_size = pop_size    # 种群大小
-        self.res = resolution   # 要求的精度 小数点后几位
-        self.interval = interval   # 区间
-        self.DNAlen = self._DNA_lenth()  # DNA长度
-
-        self.pop = []   # 种群集合
-        self.new_pop = []   # 新的种群集合
-        self.pop_fitness = [] # 个体适应度集合
-
-    def _DNA_lenth(self):
-        # 根据精度和区间计算出需要多长二进制位来编码
-        L = self.interval[-1] - self.interval[0]    # 区间长度
-        sumdiv = L*(10**self.res)   # 把区间总共划分位多少块
-        DNAl = 0 # DNA长度
-        while True:
-            sup = 2 ** DNAl
-            if sup < sumdiv:
-                DNAl += 1
-            else:
-                break
-        return DNAl
 
     def produce_bpop(self):
         # 产生二进制编码初始种群
@@ -51,8 +28,7 @@ class Population:
     def produce_rpop(self):
         # 产生实数编码种群
         for i in range(self.pop_size):
-            self.pop.append(random.randint(self.interval[0],self.interval[-1]))
-
+            self.pop.append(random.uniform(self.interval[0], self.interval[-1]))
 
     def update_pop(self):
         # 更新种群
