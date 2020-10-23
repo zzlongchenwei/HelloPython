@@ -7,17 +7,9 @@
 """
 
 
-class StoppingRule:
-    """
-    停止准则
-    """
-    def __init__(self, num_max_gen):
-        # age 迭代数
-        self.age = 0
-        # 最大迭代次数
-        self.NG = num_max_gen
-
-    def stop_rule(self):
+def stop_rule(age, NG=100):  # NG最大迭代数 100~500
         # 满足最大迭代次数时停止
-        if self.age == self.NG:
-            return
+        if age == NG:
+            return 0
+        else:
+            return 1

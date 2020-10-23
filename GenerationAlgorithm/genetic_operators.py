@@ -9,6 +9,7 @@ from GA import GAbase
 import random
 import copy
 
+
 class GenOperators(GAbase):
     # 交叉
     def crossover(self, pc=0.4, mode=0, op_alph=0):
@@ -19,39 +20,42 @@ class GenOperators(GAbase):
         temp = copy.deepcopy(self.pop)
         while True:
             n1 = random.randint(0, m)
-            print('n1', n1)
             parent[0] = temp.pop(n1)
-            print('parent[0]', parent[0])
             m -= 1
             n2 = random.randint(0, m)
-            print('n2', n2)
             parent[1] = temp.pop(n2)
-            print('parent[1]', parent[1])
             m -= 1
-            print('m', m)
+
             # mode=0 算术交叉  alph默认1/2
             if mode == 0:
                 rnum = random.random()
                 if op_alph:
-                    alph1 = random.random()
-                    alph2 = random.random()
+                    alph = random.random()
                 else:
-                    alph1 = alph2 = 0.5
-                if rnum < pc :
-                    new_individual1 = alph1*parent[0] + (1-alph1)*parent[1]
-                    new_individual2 = alph2*parent[0] + (1-alph2)*parent[1]
+                    alph= 0.5
+                if 0 <= rnum <= pc:
+                    new_individual1 = alph*parent[0] + (1-alph)*parent[1]
+                    new_individual2 = alph*parent[1] + (1-alph)*parent[0]
                     self.new_pop.append(new_individual1)
                     self.new_pop.append(new_individual2)
                 else:
                     self.new_pop.append(parent[0])
                     self.new_pop.append(parent[1])
 
-            if m == -1: break
-
-
+            if m == -1:
+                print('-----交叉完成-----')
+                print('交叉后列表', self.new_pop)
+                break
 
     # 变异
-    def mutation(self, pm=0.0001):  # pm为变异概率 0.001~0.1
-        pass
+    def mutation(self, pm=0.01):  # pm为变异概率 0.001~0.1
+        for i in range(self.pop_size):
+            rnum = random.random()
+            if rnum <= pm:
+                self.new_pop[i] = random.uniform(self.interval[0], self.interval[1])
+        print('-----变异完成-----')
+        print('变异后列表', self.new_pop)
+
+
 
 

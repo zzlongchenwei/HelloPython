@@ -32,5 +32,10 @@ class Population(Selection, GenOperators):
 
     def update_pop(self):
         # 更新种群
-        pass
+        self.pop = self.new_pop
+        self.new_pop = []
+        self.choice_pop = []
+        self.pop_fitness = []
+        self.pisl = []
+        print('——————更新种群——————')
 
