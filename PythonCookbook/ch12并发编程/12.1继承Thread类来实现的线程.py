@@ -10,10 +10,13 @@ from threading import Thread
 import time
 
 
+
+
+
 class CountdownThread(Thread):
     def __init__(self, n):
         super().__init__()
-        self.n = 0
+        self.n = n
 
     def run(self):
         while self.n > 0:
@@ -22,5 +25,11 @@ class CountdownThread(Thread):
             time.sleep(5)
 
 
+# c = CountdownThread(5)
+# c.start()
+import multiprocessing
+
 c = CountdownThread(5)
-c.start()
+# 可以通过 multiprocessing 模块在一个单独的进程中执行你的代码
+p = multiprocessing.Process(target=c.run)
+p.start()
