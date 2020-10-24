@@ -5,7 +5,7 @@
 @time:2020/10/24  @author:zzlong  
 @file:12..py
 """
-
+import heapq
 
 class PriorityQueue:
     def __init__(self):

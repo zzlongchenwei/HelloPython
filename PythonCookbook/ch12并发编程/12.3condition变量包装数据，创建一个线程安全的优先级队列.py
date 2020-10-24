@@ -25,4 +25,4 @@ class PriorityQueue:
         with self._cv:
             while len(self._queue) == 0:
                 self._cv.wait()
-            return heapq.heappop(self._queue[-1])
+            return heapq.heappop(self._queue)[-1]   # 返回堆里最小的元组，取元组item
