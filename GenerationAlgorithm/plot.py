@@ -13,7 +13,7 @@ def plotfunc(func, pointx, draw=1):
     plt.ion()  # 开启interactive mode
     # fig = plt.figure()
     plt.cla()
-    x = np.linspace(-10, 10)
+    x = np.linspace(-10, 10, 1000)
     y = func(x)
     plt.title('y = x^2')
     plt.xlabel('x')

@@ -12,12 +12,13 @@
 from GA import GA
 from stopping_rule import stop_rule
 from plot import *
-
+import numpy as np
 
 if __name__ == '__main__':
     interval = [-10, 10]  # 区间
     mod = 'min'  # 模式
     func = lambda x: x**2
+    # func = lambda x: (x**2)*np.sin(4*x)
 
     # 产生一个种群
     ga = GA(func, mod, 1, interval, 20)  # 一个种群实例
