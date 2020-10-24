@@ -6,14 +6,19 @@
 @file:main.py
 """
 
+# ****************************************************************
+# 将设置->工具->python scientific->在工具窗口中显示绘图勾去掉，不然会内存爆炸
+# ****************************************************************
 from GA import GA
 from stopping_rule import stop_rule
 from plot import *
+
+
 if __name__ == '__main__':
     interval = [-10, 10]  # 区间
     mod = 'min'  # 模式
-
     func = lambda x: x**2
+
     # 产生一个种群
     ga = GA(func, mod, 1, interval, 20)  # 一个种群实例
     ga.produce_rpop()  # 创建一个实数编码种群
@@ -36,7 +41,6 @@ if __name__ == '__main__':
 
         # 选择
         ga.pro_fitness()  # 计算适应值
-
         print('----' * 10)
         ga.rws()  # 轮盘赌选择
         print('----' * 10)

@@ -96,11 +96,10 @@ class GA:
             print('当前代最小值', fm)
             for i in range(len(valuelist)):  # 遍历原函数值列表，
                 if valuelist[i] > fm:
-                    scalf = a * (valuelist[i] - fm) + b + random.random()
+                    scalf = a * (valuelist[i] - fm) + b
                     self.pop_fitness.append(scalf)
                 else:
                     self.pop_fitness.append(self.sigma(1))
-
         elif self.mod == 'min':
             fm = max(valuelist)
             print('当前待最大值', fm)

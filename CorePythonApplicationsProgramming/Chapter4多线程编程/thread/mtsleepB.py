@@ -30,7 +30,7 @@ def main():
         locks.append(lock)
 
     for i in nloops:
-        _thread.start_new_thread(loop, (i, loops[i], locks[i]))
+        _thread.start_new_thread(loop, (i, loops[i], locks[i])) # 把后面元组传给前面的函数
 
     for i in nloops:
         while locks[i].locked(): pass   # 如果获取了锁对象则返回 True，否则，返回 False
