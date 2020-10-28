@@ -1,11 +1,3 @@
-"""
-# !/usr/bin/env python3
-# -*- coding: UTF-8 -*-
--剑衣沉沉晚霞归，酒杖津津神仙来-
-@time:2020/10/25  @author:zzlong  
-@file:12.5每一个锁分配一个唯一的 id.py
-"""
-
 import threading
 from contextlib import contextmanager
 
@@ -19,40 +11,38 @@ def acquire(*locks):
     locks = sorted(locks, key=lambda x: id(x))
 
     # Make sure lock order of previously acquired locks is not violated
-    acquired = getattr(_local, 'acquired', [])
-    if acquired and max(id(lock) for lock in acquired) >= id(locks[0]):
-        raise RuntimeError('Lock Order Violation')
+    acquired = getattr(_local, 'acquired', [])  # equivalent to _local.acquired, return[]
+    if acquired and max(id(lock) for lock in acquired) >= id(locks[0]):  # if acquired is none and max id(lock) >= id(0)
+        raise RuntimeError('Lock Order Violation')  # raise error
 
     # Acquire all of the locks
-    acquired.extend(locks)
-    _local.acquired = acquired
+    acquired.extend(locks)  # append all lock to []
+    _local.acquired = acquired  # assign value to attribute
 
     try:
         for lock in locks:
             lock.acquire()
-            yield
+        yield
     finally:
         # Release locks in reverse order of acquisition
         for lock in reversed(locks):
             lock.release()
-            del acquired[-len(locks):]
+        del acquired[-len(locks):]
 
 
+# import threading
 # x_lock = threading.Lock()
 # y_lock = threading.Lock()
-#
 #
 # def thread_1():
 #     while True:
 #         with acquire(x_lock, y_lock):
 #             print('Thread-1')
 #
-#
 # def thread_2():
 #     while True:
 #         with acquire(y_lock, x_lock):
 #             print('Thread-2')
-#
 #
 # t1 = threading.Thread(target=thread_1)
 # t1.daemon = True
@@ -61,8 +51,6 @@ def acquire(*locks):
 # t2 = threading.Thread(target=thread_2)
 # t2.daemon = True
 # t2.start()
-
-# import threading
 
 x_lock = threading.Lock()
 y_lock = threading.Lock()
@@ -85,6 +73,7 @@ def thread_2():
 t1 = threading.Thread(target=thread_1)
 t1.daemon = True
 t1.start()
+
 t2 = threading.Thread(target=thread_2)
 t2.daemon = True
 t2.start()
