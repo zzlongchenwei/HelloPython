@@ -7,7 +7,7 @@
 """
 import random
 import copy
-
+from collections import defaultdict
 
 class GA:
     """
@@ -18,9 +18,10 @@ class GA:
       interval 取值区间
       pop_size 种群大小
       resolution 要求的精度，小数点后几位，（默认为1，小数点后0位）
+      NG 最大迭代次数
       """
 
-    def __init__(self, func, mod, scal, interval, pop_size=20, resolution=0):
+    def __init__(self, func, mod, scal, interval, NG, pop_size=20, resolution=0):
         self.func = func  # 原函数
         self.mod = mod  # 模式
         self.scal = scal  # 标定模式
@@ -39,6 +40,7 @@ class GA:
         self.pisl = []  # 选择概率集合
 
         self.age = 1  # 迭代数
+        self.num_gen = NG # 最大迭代次数
 
     # 根据精度和区间计算出需要多长二进制位来编码
     def _DNA_lenth(self):
@@ -54,7 +56,7 @@ class GA:
         return DNAl  # 返回DNA长度
 
     # gauss
-    def sigma(self, ab=0):
+    def gauss_perturbation(self, ab=0):
         if ab:
             return abs(random.gauss(0, 1))
         else:
@@ -84,7 +86,17 @@ class GA:
         self.choice_pop = []
         self.pop_fitness = []
         self.pisl = []
-        print('——————更新种群——————')
+    # 最优值
+    def optimized_value(self):
+        optimal_value = ()
+        pop_v_k = defaultdict(list)
+        for x in self.pop:
+            pop_v_k[x].append(self.func(x))
+        if self.mod == 'min':
+            optimal_value = min(zip(pop_v_k.values(), pop_v_k.keys()))   # zip返回一个元组迭代器，
+        else:
+            pass
+        return optimal_value
 
     # ------------
     #   选择
@@ -99,7 +111,7 @@ class GA:
                     scalf = a * (valuelist[i] - fm) + b
                     self.pop_fitness.append(scalf)
                 else:
-                    self.pop_fitness.append(self.sigma(1))
+                    self.pop_fitness.append(self.gauss_perturbation(1))
         elif self.mod == 'min':
             fm = max(valuelist)
             print('当前待最大值', fm)
@@ -108,7 +120,7 @@ class GA:
                     scalf = a * (fm - valuelist[i]) + b
                     self.pop_fitness.append(scalf)
                 else:
-                    self.pop_fitness.append(self.sigma(1))  # 否则加入一个适应度特别小的值
+                    self.pop_fitness.append(self.gauss_perturbation(1))  # 否则加入一个适应度特别小的值
         print('种群适应度列表', self.pop_fitness)  # 打印种群适应度列表
 
     # 适应度计算
@@ -224,10 +236,25 @@ class GA:
     # ------------
     #   变异
     # -------------
-    def mutation(self, pm=0.01):  # pm为变异概率 0.001~0.1   # 高斯变异
+    def mutation(self, mod, pm=0.01):  # pm为变异概率 0.001~0.1   # 高斯变异
         for i in range(self.pop_size):
-            rnum = random.random()
-            if rnum <= pm:
-                self.new_pop[i] = random.uniform(self.interval[0], self.interval[1])
+            if mod == 'uniform':
+                rnum = random.random()
+                if rnum <= pm:
+                    self.new_pop[i] = random.uniform(self.interval[0], self.interval[1])
+            elif mod == 'gauss':
+                self.new_pop[i] += self.gauss_perturbation()
+
+
         print('-----变异完成-----')
         print('变异后列表', self.new_pop)
+
+    # ------------
+    #   停止条件
+    # -------------
+    def stop_rule(self):  # NG最大迭代数 100~500
+        # 满足最大迭代次数时停止
+        if self.age == self.num_gen:
+            return 0
+        else:
+            return 1

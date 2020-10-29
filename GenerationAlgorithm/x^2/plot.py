@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def plotfunc(func, pointx, draw=1):
+def plot_func(func, pointx, draw=1):
     plt.ion()  # 开启interactive mode
     # fig = plt.figure()
     plt.cla()
@@ -20,8 +20,8 @@ def plotfunc(func, pointx, draw=1):
     plt.ylabel('y')
     plt.plot(x, y)
     pointy = []
-    for i in range(len(pointx)):
-        pointy.append(func(pointx[i]))
+    for i in pointx:
+        pointy.append(func(i))
     plt.scatter(pointx, pointy, s=60 , c='r', marker='.')
     if draw:
         plt.draw()
@@ -31,6 +31,13 @@ def plotfunc(func, pointx, draw=1):
     else:
         plt.ioff()  # 开启interactive mode
         plt.show()  # 程序会停到这
+
+def plot_best(pop, age):
+    y = max(func(i) for i in pop)
+    x = age
+    plt.plot(x,y)
+    plt.show()  # 程序会停到这
+
 
 
 if __name__ == '__main__':

@@ -10,24 +10,27 @@
 # 将设置->工具->python scientific->在工具窗口中显示绘图勾去掉，不然会内存爆炸
 # ****************************************************************
 from GA import GA
-from stopping_rule import stop_rule
 from plot import *
-import numpy as np
+
+
 
 if __name__ == '__main__':
     interval = [-10, 10]  # 区间
     mod = 'min'  # 模式
-    # func = lambda x: x**2
-    func = lambda x: (x**2)*np.sin(4*x)
+    func = lambda x: x**2
+    # func = lambda x: (x**2)*np.sin(4*x)
+    scal = 1
+    NG = 150
+    pop_size = 30
 
     # 产生一个种群
-    ga = GA(func, mod, 1, interval, 20)  # 一个种群实例
+    ga = GA(func, mod, scal, interval, NG, pop_size)  # 一个种群实例
     ga.produce_rpop()  # 创建一个实数编码种群
 
-    plotfunc(func, ga.pop)
+    plot_func(func, ga.pop)
     # print('当前种群', ga.pop)  # 打印该种群
     # print('----' * 10)
-    while stop_rule(ga.age, NG=100):
+    while ga.stop_rule():
         print('========>第%s代开始' % ga.age)
         print('当前种群', ga.pop)
         print('-----' * 10)
@@ -37,7 +40,7 @@ if __name__ == '__main__':
         print('----' * 10)
 
         # 变异
-        ga.mutation()
+        ga.mutation(mod='gauss')
         print('----' * 10)
 
         # 选择
@@ -54,13 +57,13 @@ if __name__ == '__main__':
         ga.age += 1
 
         # 画图
-        plotfunc(func, ga.pop)
+        # plot_func(func, ga.pop)
 
     print('迭代%s完成' % ga.age)
+    print('最优解:', ga.optimized_value()[1], '最优值:', ga.optimized_value()[0][0])
+    plot_func(func, ga.pop, draw=0)
 
-    sort_lits = sorted(map(abs, ga.pop))
-    print('排序后', sort_lits)
-    min = func(sort_lits[0])
-    print('最优解', sort_lits[0])
-    print('最优值', min)
-    plotfunc(func, ga.pop, 0)
+
+
+
+
