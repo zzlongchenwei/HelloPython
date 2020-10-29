@@ -28,35 +28,38 @@ class GA:
 
         self.pop_size = pop_size  # 种群大小
 
-        self.res = resolution  # 要求的精度 小数点后几位
+        # self.res = resolution  # 要求的精度 小数点后几位
         self.interval = interval  # 区间
-        self.DNAlen = self._DNA_lenth()  # DNA长度
+        # self.DNAlen = self._DNA_lenth()  # DNA长度
 
         self.pop = []  # 种群集合
         self.new_pop = []  # 新的种群集合
         self.choice_pop = []  # 选择后的种群集合
 
+        self.now_best_individual = []
+        self.now_best_func = []
+
         self.pop_fitness = []  # 适应度集合
         self.pisl = []  # 选择概率集合
 
-        self.age = 1  # 迭代数
+        self.age = 0  # 迭代数
         self.num_gen = NG # 最大迭代次数
 
     # 根据精度和区间计算出需要多长二进制位来编码
-    def _DNA_lenth(self):
-        L = self.interval[-1] - self.interval[0]  # 区间长度
-        sumdiv = L * (10 ** self.res)  # 把区间总共划分位多少块
-        DNAl = 0  # DNA长度
-        while True:
-            sup = 2 ** DNAl  # sup为2的DNA长度次方
-            if sup < sumdiv:
-                DNAl += 1
-            else:
-                break
-        return DNAl  # 返回DNA长度
+    # def _DNA_lenth(self):
+    #     L = self.interval[-1] - self.interval[0]  # 区间长度
+    #     sumdiv = L * (10 ** self.res)  # 把区间总共划分位多少块
+    #     DNAl = 0  # DNA长度
+    #     while True:
+    #         sup = 2 ** DNAl  # sup为2的DNA长度次方
+    #         if sup < sumdiv:
+    #             DNAl += 1
+    #         else:
+    #             break
+    #     return DNAl  # 返回DNA长度
 
     # gauss
-    def gauss_perturbation(self, ab=0):
+    def gauss_perturbation(self, ab=0): # gauss扰动
         if ab:
             return abs(random.gauss(0, 1))
         else:
@@ -66,13 +69,13 @@ class GA:
     #   种群生成
     # ---------------
     # 产生二进制编码初始种群
-    def produce_bpop(self):
-        DNA = []
-        for i in range(self.pop_size):
-            for j in range(self.DNAlen):
-                DNA.append(random.randint(0, 1))
-            self.pop.append(DNA)
-            DNA = []
+    # def produce_bpop(self):
+    #     DNA = []
+    #     for i in range(self.pop_size):
+    #         for j in range(self.DNAlen):
+    #             DNA.append(random.randint(0, 1))
+    #         self.pop.append(DNA)
+    #         DNA = []
 
     # 产生实数编码种群
     def produce_rpop(self):
@@ -86,16 +89,17 @@ class GA:
         self.choice_pop = []
         self.pop_fitness = []
         self.pisl = []
+
     # 最优值
     def optimized_value(self):
         optimal_value = ()
-        pop_v_k = defaultdict(list)
+        # defaultdict方法创建字典
+        pop_v_k = defaultdict(list) # 键为列表
         for x in self.pop:
             pop_v_k[x].append(self.func(x))
+            # pop_v_k[x].setdefault(str(x), self.func(x))
         if self.mod == 'min':
             optimal_value = min(zip(pop_v_k.values(), pop_v_k.keys()))   # zip返回一个元组迭代器，
-        else:
-            pass
         return optimal_value
 
     # ------------
@@ -149,20 +153,21 @@ class GA:
             accpis[i] = acc + accpis[i]
             acc = accpis[i]
         accpis.append(0)  # 把0添加到末尾，因为i=0 时， 0-1=-1
-        print('累计概率', self.pisl)
+        # print('累计概率', self.pisl)
 
-    # 选择函数: rws()轮盘赌选择
-    def rws(self):
+    # 选择函数
+    # rws()轮盘赌选择
+    def rws(self, percent_size):
         # roulette_wheel_selection() 轮盘赌选择
         # 计算选择率
         total_fit = sum(self.pop_fitness)
-        print('适应度总和', total_fit)
+        # print('适应度总和', total_fit)
 
         for i in range(self.pop_size):
             pis = self.pop_fitness[i] / total_fit  # 单个选择概率
             self.pisl.append(pis)
-        print('选择概率', self.pisl)
-        print('总选择概率', sum(self.pisl))
+        # print('选择概率', self.pisl)
+        # print('总选择概率', sum(self.pisl))
 
         # 计算累计值
         self.accnum()
@@ -186,15 +191,29 @@ class GA:
                 flag = 0  # 不产生新的随机数
             if i == self.pop_size:
                 i = 0
-            if len(choice_num) == self.pop_size:
-                print('-----轮盘选择结束-----')
+            if len(choice_num) == percent_size:
                 break  # 直到选择够了种族个数
-        print('选择的是', choice_num)
+        # print('选择的是', choice_num)
 
-        for j in range(self.pop_size):
+        for j in range(percent_size):
             n = choice_num[j]
             self.choice_pop.append(self.new_pop[n])
+        print('轮盘选择的', self.choice_pop[self.pop_size-percent_size:])
 
+
+    # elit retention 精英保留
+    def elit_retention(self, percent_size:int):
+        sortfit_num = sorted(range(self.pop_size), key=lambda k:self.pop_fitness[k])
+        print('按适应度值排的序号', sortfit_num)
+        for i in range(percent_size):
+            n = sortfit_num[i]
+            self.choice_pop.append(self.new_pop[n])
+        print('精英选择的', self.choice_pop)
+
+    def selection(self, percent_size):
+        self.elit_retention(percent_size)
+        self.rws(self.pop_size-percent_size)
+        print('选择的是', self.choice_pop)
     # ------------
     #   交叉
     # -------------
@@ -236,14 +255,19 @@ class GA:
     # ------------
     #   变异
     # -------------
-    def mutation(self, mod, pm=0.01):  # pm为变异概率 0.001~0.1   # 高斯变异
+    def mutation(self, mod, pm=0.005):  # pm为变异概率 0.001~0.1   # 高斯变异
         for i in range(self.pop_size):
-            if mod == 'uniform':
-                rnum = random.random()
-                if rnum <= pm:
-                    self.new_pop[i] = random.uniform(self.interval[0], self.interval[1])
-            elif mod == 'gauss':
-                self.new_pop[i] += self.gauss_perturbation()
+            flag = 1
+            rnum = random.random()
+            if rnum <= pm:
+                while flag:     # 这个变异值在区间内才允许
+                    if mod == 'uniform':
+                        self.new_pop[i] = random.uniform(self.interval[0], self.interval[1])
+                    elif mod == 'gauss':
+                        self.new_pop[i] += self.gauss_perturbation()
+
+                    if self.interval[0] <= self.new_pop[i] or self.interval[1] <= self.new_pop[i]:
+                        flag = 0
 
 
         print('-----变异完成-----')

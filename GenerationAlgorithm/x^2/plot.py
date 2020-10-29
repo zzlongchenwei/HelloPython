@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def plot_func(func, pointx, draw=1):
+def plot_func(func, pointx, sub_x, sub_y, draw=1):
+    plt.figure(1)
     plt.ion()  # 开启interactive mode
     # fig = plt.figure()
     plt.cla()
@@ -30,14 +31,11 @@ def plot_func(func, pointx, draw=1):
         # plt.close(1)
     else:
         plt.ioff()  # 开启interactive mode
+        plt.figure(2)
+        x = range(sub_x)
+        y = sub_y
+        plt.plot(x, y)
         plt.show()  # 程序会停到这
-
-def plot_best(pop, age):
-    y = max(func(i) for i in pop)
-    x = age
-    plt.plot(x,y)
-    plt.show()  # 程序会停到这
-
 
 
 if __name__ == '__main__':

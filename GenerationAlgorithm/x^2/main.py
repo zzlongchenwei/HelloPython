@@ -13,21 +13,20 @@ from GA import GA
 from plot import *
 
 
-
 if __name__ == '__main__':
     interval = [-10, 10]  # 区间
     mod = 'min'  # 模式
     func = lambda x: x**2
     # func = lambda x: (x**2)*np.sin(4*x)
     scal = 1
-    NG = 150
-    pop_size = 30
+    NG = 500
+    pop_size = 50
 
     # 产生一个种群
     ga = GA(func, mod, scal, interval, NG, pop_size)  # 一个种群实例
     ga.produce_rpop()  # 创建一个实数编码种群
 
-    plot_func(func, ga.pop)
+    # plot_func(func, ga.pop)
     # print('当前种群', ga.pop)  # 打印该种群
     # print('----' * 10)
     while ga.stop_rule():
@@ -40,14 +39,20 @@ if __name__ == '__main__':
         print('----' * 10)
 
         # 变异
-        ga.mutation(mod='gauss')
+        ga.mutation(mod='uniform')
         print('----' * 10)
 
         # 选择
         ga.pro_fitness()  # 计算适应值
         print('----' * 10)
-        ga.rws()  # 轮盘赌选择
+        ga.selection(int(0.4*ga.pop_size))  # 40%精英，其余轮盘
         print('----' * 10)
+
+
+        # 每代最优
+        ga.now_best_individual.append(ga.optimized_value()[0][0])
+        ga.now_best_func.append(ga.optimized_value()[1])
+
 
         # 更新种群
         ga.update_pop()
@@ -58,10 +63,13 @@ if __name__ == '__main__':
 
         # 画图
         # plot_func(func, ga.pop)
+    print('每代最优解', ga.now_best_individual)
+    print('每代最优值', ga.now_best_func)
 
-    print('迭代%s完成' % ga.age)
-    print('最优解:', ga.optimized_value()[1], '最优值:', ga.optimized_value()[0][0])
-    plot_func(func, ga.pop, draw=0)
+    print('===========>迭代%s完成' % ga.age)
+    print('最优解:', ga.optimized_value()[1], '最优值%0.7f:' % ga.optimized_value()[0][0])
+    plot_func(func, ga.pop,sub_x=ga.num_gen, sub_y=ga.now_best_func, draw=0)
+
 
 
 
