@@ -138,7 +138,7 @@ class GA:
             x = self.new_pop[i]
             f = self.func(x)
             valuelist.append(f)  # 调用原函数对pop里的每个数进行计算添加到valuelist中
-        print('函数值列表', valuelist)
+        # print('函数值列表', valuelist)
         if self.scal == 0:
             self.pop_fitness = valuelist  # 用原函数算适应值
         elif self.scal == 1:
@@ -155,8 +155,8 @@ class GA:
         accpis.append(0)  # 把0添加到末尾，因为i=0 时， 0-1=-1
         # print('累计概率', self.pisl)
 
-    # 选择函数
     # rws()轮盘赌选择
+    # percent_size选择多少个数作轮盘赌
     def rws(self, percent_size):
         # roulette_wheel_selection() 轮盘赌选择
         # 计算选择率
@@ -172,8 +172,7 @@ class GA:
         # 计算累计值
         self.accnum()
         # print(pisl)
-
-        # 轮盘选择  # 精英选择
+        # 轮盘选择
         choice_num = []
         i = 0
         flag = 1
@@ -210,6 +209,7 @@ class GA:
             self.choice_pop.append(self.new_pop[n])
         print('精英选择的', self.choice_pop)
 
+    # 选择函数
     def selection(self, percent_size):
         self.elit_retention(percent_size)
         self.rws(self.pop_size-percent_size)
@@ -230,7 +230,6 @@ class GA:
             n2 = random.randint(0, m)
             parent[1] = temp.pop(n2)
             m -= 1
-
             # mode=0 算术交叉  alph默认1/2
             if mode == 0:
                 rnum = random.random()
@@ -246,7 +245,6 @@ class GA:
                 else:
                     self.new_pop.append(parent[0])
                     self.new_pop.append(parent[1])
-
             if m == -1:
                 print('-----交叉完成-----')
                 print('交叉后列表', self.new_pop)
@@ -255,7 +253,7 @@ class GA:
     # ------------
     #   变异
     # -------------
-    def mutation(self, mod, pm=0.005):  # pm为变异概率 0.001~0.1   # 高斯变异
+    def mutation(self, mod, pm=0.002):  # pm为变异概率 0.001~0.1   # 高斯变异
         for i in range(self.pop_size):
             flag = 1
             rnum = random.random()
@@ -268,8 +266,6 @@ class GA:
 
                     if self.interval[0] <= self.new_pop[i] or self.interval[1] <= self.new_pop[i]:
                         flag = 0
-
-
         print('-----变异完成-----')
         print('变异后列表', self.new_pop)
 

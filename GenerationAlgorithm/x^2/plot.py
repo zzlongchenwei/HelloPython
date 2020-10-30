@@ -42,7 +42,7 @@ def plot_func(func, pointx, interval, sub_x, sub_y, draw=1):
 
     if draw:
         plt.draw()
-        plt.pause(0.02)
+        plt.pause(0.01)
         # plt.ioff()  # 开启interactive mode
         # plt.close(1)
     else:
