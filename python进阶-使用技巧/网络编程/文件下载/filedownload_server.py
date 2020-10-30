@@ -20,7 +20,7 @@ def send_file_2_client(new_clnt_sock, new_clnt_addr):
             file_content = f.read(1024)
             if file_content:
                 # 3.发送文件的数据给客户端
-                new_clnt_sock.senda(file_content)
+                new_clnt_sock.sendall(file_content)
             else:
                 break
         f.close()
