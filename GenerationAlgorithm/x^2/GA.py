@@ -59,11 +59,11 @@ class GA:
     #     return DNAl  # 返回DNA长度
 
     # gauss
-    def gauss_perturbation(self, ab=0): # gauss扰动
+    def gauss_perturbation(self,miu=0,sigma=1, ab=0): # gauss扰动
         if ab:
-            return abs(random.gauss(0, 1))
+            return abs(random.gauss(miu, sigma))
         else:
-            return random.gauss(0, 1)
+            return random.gauss(miu, sigma)
 
     # -------------
     #   种群生成
@@ -264,7 +264,7 @@ class GA:
                     if mod == 'uniform':
                         self.new_pop[i] = random.uniform(self.interval[0], self.interval[1])
                     elif mod == 'gauss':
-                        self.new_pop[i] += self.gauss_perturbation()
+                        self.new_pop[i] = self.gauss_perturbation(miu=self.new_pop[i], sigma=1)
 
                     if self.interval[0] <= self.new_pop[i] or self.interval[1] <= self.new_pop[i]:
                         flag = 0

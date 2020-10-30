@@ -16,10 +16,10 @@ from plot import *
 if __name__ == '__main__':
     interval = [-10, 10]  # 区间
     mod = 'min'  # 模式
-    func = lambda x: x**2
-    # func = lambda x: (x**2)*np.sin(4*x)
+    # func = lambda x: x**2
+    func = lambda x: (x**2)*np.sin(4*x)
     scal = 1
-    NG = 500
+    NG = 150
     pop_size = 50
 
     # 产生一个种群
@@ -39,7 +39,7 @@ if __name__ == '__main__':
         print('----' * 10)
 
         # 变异
-        ga.mutation(mod='uniform')
+        ga.mutation(mod='gauss')
         print('----' * 10)
 
         # 选择
@@ -62,13 +62,13 @@ if __name__ == '__main__':
         ga.age += 1
 
         # 画图
-        # plot_func(func, ga.pop)
+        plot_func(func, ga.pop, ga.interval, sub_x=ga.age, sub_y=ga.now_best_func)
     print('每代最优解', ga.now_best_individual)
     print('每代最优值', ga.now_best_func)
 
     print('===========>迭代%s完成' % ga.age)
     print('最优解:', ga.optimized_value()[1], '最优值%0.7f:' % ga.optimized_value()[0][0])
-    plot_func(func, ga.pop,sub_x=ga.num_gen, sub_y=ga.now_best_func, draw=0)
+    plot_func(func, ga.pop, ga.interval,sub_x=ga.num_gen, sub_y=ga.now_best_func, draw=0)
 
 
 
