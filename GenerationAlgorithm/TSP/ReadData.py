@@ -18,9 +18,12 @@ def read_city_data(filename):
     with open(filename, newline='') as csvfile:
         city_data = defaultdict(list)
         city_reader = csv.reader(csvfile)
+        header = 1
         for row in city_reader:
-            city_data[row[0]].append(row[1])
-            city_data[row[0]].append(row[2])
+            if header: header = 0
+            else:
+                city_data[int(row[0])].append(float(row[1]))
+                city_data[int(row[0])].append(float(row[2]))
         return city_data
 
 
