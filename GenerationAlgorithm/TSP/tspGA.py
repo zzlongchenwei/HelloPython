@@ -6,24 +6,14 @@
 @file:tspGA.py
 @time:2020/10/28
 """
-"""
--剑衣沉沉晚霞归，酒杖津津神仙来-
-# !/usr/bin/env python3
-# -*- coding: UTF-8 -*-
-@time:2020/10/19  @author:zzlong  
-@file:Population.py
-"""
 import random
 import copy
 
 
 class GA:
     """
-      generation algorithm
-      func 原函数
-      interval 区间
-      pop_size 种群大小 default=20
-      """
+    generation algorithm
+    """
     def __init__(self, city_num, pop_size=20):
         self.pop_size = pop_size  # 种群大小
         self.city_num = city_num    # 城市个数
