@@ -3,7 +3,7 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
 @time:2020/10/11  @author:zzlong  
-@file:test.py
+@file:父代选择测试.py
 """
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol, ClientCreator
