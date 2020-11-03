@@ -61,8 +61,8 @@ class GA:
             city_size -= 1
             n2 = random.randint(0, city_size)   # 随机产生一个0~city_size-2
             parent.append(copy_pop.pop(n2))
-            city_size -= 1
         return parent
+
 
     # 交叉
     def crossover(self,pc=0.4):  # pc为交叉概率 0.4~0.9
@@ -148,9 +148,9 @@ class GA:
     # 适应度计算
     def fitness_calculation(self, city_data):
         for i in range(self.pop_size):  # 遍历所有个体
-            circle_distance = 0     # 旅游一圈的距离
             now_city = self.new_pop[i][0]   # 现在所在的城市是个体的第一个城市
             travel_num = 1  # 旅行了几个城市了
+            circle_distance = 0     # 旅游一圈的距离
             for city_number in self.new_pop[i][1:]:
                 pre_city = now_city     # 上个城市等于没更新前的now_city
                 now_city = city_number  # 更新now_city
@@ -162,6 +162,7 @@ class GA:
                                                                       city_data[self.new_pop[i][0]])
             self.pop_fitness.append(circle_distance)
 
+    # 计算初始种群的旅行距离
     def init_pop_fitness(self, city_data):
         for i in range(self.pop_size):  # 遍历所有个体
             circle_distance = 0  # 旅游一圈的距离
@@ -184,13 +185,13 @@ class GA:
         # elite_choice保留多少个
         all_pop_fitness = self.old_pop_fitness + self.pop_fitness   # 将老的适应度和新的适应度并集
 
-        sort_fitness_num = sorted(range(self.city_size*2), key=lambda x: all_pop_fitness[x]) # 从小到大排序，返回从小到大排个体的索引号
-        choice_individual_num = sort_fitness_num[:self.city_size]     # 精英保留的个体索引号
+        sort_fitness_num = sorted(range(self.pop_size*2), key=lambda x: all_pop_fitness[x]) # 从小到大排序，返回从小到大排个体的索引号
+        choice_individual_num = sort_fitness_num[:self.pop_size]     # 精英保留的个体索引号
         for i in choice_individual_num:
             if i < self.city_size :
                 self.choice_pop.append(self.pop[i])     # 如果该索引小于self.city_size说明是self.pop中的个体
             else:                                       # 否则是self.new_pop中的个体
-                self.choice_pop.append(self.new_pop[i-14])
+                self.choice_pop.append(self.new_pop[i-self.pop_size])
 
     # ------------
     #   停止条件

@@ -28,5 +28,9 @@ def read_city_data(filename):
 
 
 if __name__ == '__main__':
+    # 测试
     city_data = read_city_data('city_coordinate.csv')
     print(city_data)
+    for city, coord in city_data.items():
+        print(city, coord)
+    print(len(city_data))

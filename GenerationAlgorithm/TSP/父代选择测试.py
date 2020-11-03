@@ -20,8 +20,8 @@ def choose_parent(copy_individual):
         print('city_size2', city_size)
         n2 = random.randint(0, city_size)
         parent.append(copy_individual.pop(n2))
-        city_size -= 1
-        print('city_size3', city_size)
+        # city_size -= 1
+        # print('city_size3', city_size)
     return parent
 
 if __name__ == '__main__':
