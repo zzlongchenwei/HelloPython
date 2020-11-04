@@ -132,8 +132,11 @@ class GA:
         for i in range(self.pop_size):
             if random.random() < pm:
                 # a. 随机产生一个变异位置
-                X = random.randint(1,self.city_size-1)  # 变异位置从1到city_size-1
-                self.new_pop[i][X-1], self.new_pop[i][X] = self.new_pop[i][X], self.new_pop[i][X-1]     # 交换两个位置
+                X = Y = 0
+                while X == Y :
+                    X = random.randint(0, self.city_size - 1)  # 变异位置从1到city_size-1
+                    Y = random.randint(0, self.city_size - 1)
+                self.new_pop[i][X], self.new_pop[i][Y] = self.new_pop[i][Y], self.new_pop[i][X]     # 交换两个位置
 
     # -------------
     #     选择
