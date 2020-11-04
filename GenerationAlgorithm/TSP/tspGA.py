@@ -183,12 +183,12 @@ class GA:
     def selection(self):
         # 精英保留
         # elite_choice保留多少个
-        all_pop_fitness = self.old_pop_fitness + self.pop_fitness   # 将老的适应度和新的适应度并集
+        union_pop_fitness = self.old_pop_fitness + self.pop_fitness   # 将老的适应度和新的适应度并集
 
-        sort_fitness_num = sorted(range(self.pop_size*2), key=lambda x: all_pop_fitness[x]) # 从小到大排序，返回从小到大排个体的索引号
+        sort_fitness_num = sorted(range(self.pop_size*2), key=lambda x: union_pop_fitness[x]) # 从小到大排序，返回从小到大排个体的索引号
         choice_individual_num = sort_fitness_num[:self.pop_size]     # 精英保留的个体索引号
         for i in choice_individual_num:
-            if i < self.city_size :
+            if i < self.pop_size :
                 self.choice_pop.append(self.pop[i])     # 如果该索引小于self.city_size说明是self.pop中的个体
             else:                                       # 否则是self.new_pop中的个体
                 self.choice_pop.append(self.new_pop[i-self.pop_size])

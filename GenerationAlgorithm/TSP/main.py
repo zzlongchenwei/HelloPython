@@ -6,11 +6,11 @@
 @file:main.py
 @time:2020/10/30
 """
-
-from tspGA import GA
 from ReadData import *
-
+from tspGA import GA
+from tspPlot import *
 city_data = read_city_data('city_coordinate.csv')
+
 
 if __name__ == '__main__':
     # 1. 实例化TSP遗传算法
@@ -18,13 +18,14 @@ if __name__ == '__main__':
 
     # 2. 产生种群
     ga.produce_pop()
-    print('初始种群：', ga.pop)
+    # print('初始种群：', ga.pop)
     ga.init_pop_fitness(city_data)
-    print('初始种群旅行一圈的距离:',ga.old_pop_fitness)
+    # print('初始种群旅行一圈的距离:',ga.old_pop_fitness)
+    best_pop_fitness = list()
 
     while ga.stop_rule():
         # 3. 交叉
-        ga.crossover(pc=1)
+        ga.crossover(pc=0.4)
         # print('======>交叉完成:', ga.new_pop)
 
         # 4. 变异
@@ -44,7 +45,12 @@ if __name__ == '__main__':
 
         ga.age += 1
 
+        # 每代最优
+        best_pop_fitness.append(min(ga.old_pop_fitness))
+
+
     print('======>迭代第%s完成' % ga.age)
     print('当前种群为', ga.pop)
     print('适应度为', ga.old_pop_fitness)
     print('最短距离:', min(ga.old_pop_fitness),'怎么走:', ga.pop[ga.old_pop_fitness.index(min(ga.old_pop_fitness))])
+    plot_fit(best_pop_fitness)
