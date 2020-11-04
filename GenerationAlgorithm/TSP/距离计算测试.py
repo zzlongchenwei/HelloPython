@@ -17,6 +17,13 @@ def distance_between_two_city(city1_coord, city2_coord):
     return distance_2point
 
 if __name__ == '__main__':
-    c1 = city_data[14]
-    c2 = city_data[2]
-    print(distance_between_two_city(c1,c2))
+    # line = [7, 13, 8, 11, 9, 10, 1, 2, 14, 3, 4, 5, 6, 12]
+    line = [8, 13, 7, 12, 6, 5, 4, 3, 14, 2, 1, 10, 9, 11]
+    now_city= line[0]
+    cirle_distance = 0
+    for i in line[1:]:
+        old_city = now_city
+        now_city = i
+        cirle_distance += distance_between_two_city(city_data[old_city],city_data[now_city])
+    cirle_distance += distance_between_two_city(city_data[now_city],city_data[line[0]])
+    print(cirle_distance)

@@ -16,9 +16,10 @@ class GA:
     """
     generation algorithm
     """
-    def __init__(self, city_size, pop_size=20, NG=150):
+    def __init__(self, city_data, city_size, pop_size=20, NG=150):
         self.pop_size = pop_size  # 种群大小
         self.city_size = city_size    # 城市个数
+        self.city_data = city_data  # 城市的数据
 
         self.pop = []  # 种群集合
         self.new_pop = []  # 新的种群集合，交叉后，变异后
@@ -41,8 +42,13 @@ class GA:
     # 种群更新
     def update_pop(self):
         self.pop = self.choice_pop
-        self.old_pop_fitness = self.pop_fitness
 
+        # 更新老种群适应度
+        # self.old_pop_fitness = self.pop_fitness
+        self.old_pop_fitness = []
+        self.old_fitness_calculation()
+
+        # 为下一次迭代清空
         self.new_pop = []
         self.choice_pop = []
         self.pop_fitness = []
@@ -146,7 +152,7 @@ class GA:
         # return distance_2point
 
     # 适应度计算
-    def fitness_calculation(self, city_data):
+    def fitness_calculation(self):
         for i in range(self.pop_size):  # 遍历所有个体
             now_city = self.new_pop[i][0]   # 现在所在的城市是个体的第一个城市
             travel_num = 1  # 旅行了几个城市了
@@ -154,35 +160,34 @@ class GA:
             for city_number in self.new_pop[i][1:]:
                 pre_city = now_city     # 上个城市等于没更新前的now_city
                 now_city = city_number  # 更新now_city
-                circle_distance += self.distance_between_two_city(city_data[pre_city],
-                                                                  city_data[now_city]) # 计算两点距离
+                circle_distance += self.distance_between_two_city(self.city_data[pre_city],
+                                                                  self.city_data[now_city]) # 计算两点距离
                 travel_num += 1     # 又旅行了一个城市
                 if travel_num == self.city_size:    # 如果旅行了self.city_size个城市了，就该回到出发的地方
-                    circle_distance += self.distance_between_two_city(city_data[self.new_pop[i][-1]],
-                                                                      city_data[self.new_pop[i][0]])
+                    circle_distance += self.distance_between_two_city(self.city_data[self.new_pop[i][-1]],
+                                                                      self.city_data[self.new_pop[i][0]])
+
             self.pop_fitness.append(circle_distance)
 
-    # 计算初始种群的旅行距离
-    def init_pop_fitness(self, city_data):
+
+    # 计算老种群的旅行距离
+    def old_fitness_calculation(self):
         for i in range(self.pop_size):  # 遍历所有个体
             circle_distance = 0  # 旅游一圈的距离
-            now_city = self.pop[i][1]  # 现在所在的城市是个体的第一个城市
-            travel_num = 1  # 旅行了几个城市了
+            now_city = self.pop[i][0]  # 现在所在的城市是个体的第一个城市
             for city_number in self.pop[i][1:]:
                 pre_city = now_city  # 上个城市等于没更新前的now_city
                 now_city = city_number  # 更新now_city
-                circle_distance += self.distance_between_two_city(city_data[pre_city],
-                                                                  city_data[now_city])  # 计算两点距离
-                travel_num += 1  # 又旅行了一个城市
-                if travel_num == self.city_size:  # 如果旅行了self.city_size个城市了，就该回到出发的地方
-                    circle_distance += self.distance_between_two_city(city_data[self.pop[i][-1]],
-                                                                      city_data[self.pop[i][0]])
+                circle_distance += self.distance_between_two_city(self.city_data[pre_city],
+                                                                  self.city_data[now_city])  # 计算两点距离
+            circle_distance += self.distance_between_two_city(self.city_data[now_city],
+                                                                      self.city_data[self.pop[i][0]])
             self.old_pop_fitness.append(circle_distance)
 
     # 选择函数
     def selection(self):
         # 精英保留
-        # elite_choice保留多少个
+        # 1.选择的个体
         union_pop_fitness = self.old_pop_fitness + self.pop_fitness   # 将老的适应度和新的适应度并集
 
         sort_fitness_num = sorted(range(self.pop_size*2), key=lambda x: union_pop_fitness[x]) # 从小到大排序，返回从小到大排个体的索引号
