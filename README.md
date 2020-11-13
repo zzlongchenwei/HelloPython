@@ -1,2 +1,2 @@
 # Hello-Python
-# Pythonå­¦ä¹ 
+>Python Æ½Ê±Á·Ï°´úÂë

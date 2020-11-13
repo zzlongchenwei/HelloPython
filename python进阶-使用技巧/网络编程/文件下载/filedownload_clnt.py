@@ -15,7 +15,7 @@ def main():
     # dest_ip = input('输入下载服务器的ip：')
     # dest_port = input('输入下载服务器的port：')
 
-    dest_ip = '192.168.129.129'
+    dest_ip = '127.0.0.1'
     dest_port = 7890
     # 2.链接客户端
     tcp_socket.connect((dest_ip, dest_port))

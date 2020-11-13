@@ -35,7 +35,7 @@ if __name__ == "__main__":
     while True:
         client_socket, client_address = server_socket.accept()
         # print("[%s, %s]用户连接上了" % client_address[0], client_address[1])
-        print("[%s, %s]用户连接上了" % client_address)
+        print("[%s]用户连接上了" % client_address)
         handle_client_process = Process(target=handle_client, args=(client_socket,))
         handle_client_process.start()
         client_socket.close()

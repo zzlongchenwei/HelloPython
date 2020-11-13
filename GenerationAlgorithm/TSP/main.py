@@ -10,6 +10,7 @@ from tspGA import GA
 from tspPlot import *
 from ReadData import *
 
+
 if __name__ == '__main__':
     city_data = read_city_data('city_coordinate.csv')
     # 1. 实例化TSP遗传算法
