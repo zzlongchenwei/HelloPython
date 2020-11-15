@@ -10,7 +10,6 @@ from pymysql import *
 
 
 def main():
-
     # 1.建立连接
     conn = connect(host='localhost', port=3306, user='root', password='weiwenhuamingZZ1', database='python_test',
                    charset='utf8')     # 必须所有参数本地都有，不然不会成功
@@ -18,8 +17,8 @@ def main():
     cursor = conn.cursor()  # 游标
     # 3.执行SQL语句
     students_table = cursor.execute("select * from students;")  # 执行SQL语句
-    print(students_table)
-    student_data = cursor.fetchone()
+    print(students_table)   # 打印的是10 ，也就是表有10行
+    student_data = cursor.fetchone()    # 获得是一个元组
     print(student_data)
     student_data = cursor.fetchmany(3)
     print(student_data)
