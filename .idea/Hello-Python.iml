@@ -12,6 +12,9 @@
       <sourceFolder url="file://$MODULE_DIR$/PythonCookbook/ch12并发编程" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/GenerationAlgorithm/x^2" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/GenerationAlgorithm/TSP" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mini-web/04-让web服务器支持WSGI协议" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mini-web/03-将web服务器和逻辑处理的代码分开" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mini-web/05-通过传递字典实现浏览器请求的资源不同相应不同" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.8 (Hello-Python)" jdkType="Python SDK" />

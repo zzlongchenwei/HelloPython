@@ -53,9 +53,9 @@ class BasicTextParser(Parser):
         self.addRule(HeadingRule())
         self.addRule(ParagraphRule())
 
-        self.addFilter(r'\*(.+?)\*', 'emphasis')
-        self.addFilter(r'(http://[\.a-zA-Z/]+)', 'url')
-        self.addFilter(r'([\.a-zA-Z]+@[\.a-zA-Z]+[a-zA-Z]+)', 'mail')
+        self.addFilter(tcp_server_socket'\*(.+?)\*', 'emphasis')
+        self.addFilter(tcp_server_socket'(http://[\.a-zA-Z/]+)', 'url')
+        self.addFilter(tcp_server_socket'([\.a-zA-Z]+@[\.a-zA-Z]+[a-zA-Z]+)', 'mail')
 
 
 handler = HTMLRenderer()

@@ -29,14 +29,14 @@
 #
 #         except IOError:
 #     '''
-#         HTTP1.1 404 Not Found\r\n
-#         \r\n
+#         HTTP1.1 404 Not Found\tcp_server_socket\n
+#         \tcp_server_socket\n
 #         not found
 #     '''
 #     # 返回响应数据
 #     '''
-#     HTTP1.1 200 OK\r\n
-#     \r\n
+#     HTTP1.1 200 OK\tcp_server_socket\n
+#     \tcp_server_socket\n
 #     “Heloo”
 #     '''
 #     # send()

@@ -13,7 +13,7 @@ print('<html><head><title>...</title><body>')
 
 title = True
 for block in blocks(sys.stdin):
-    block = re.sub(r'\*(.+?)\*', r'<em>\1</em>', block)
+    block = re.sub(tcp_server_socket'\*(.+?)\*', tcp_server_socket'<em>\1</em>', block)
     if title:
         print('<h1>')
         print(block)

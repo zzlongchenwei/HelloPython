@@ -31,7 +31,7 @@ def plot_func(func, pointx, interval, sub_x, sub_y, draw=1):
     pointy = []
     for i in pointx:
         pointy.append(func(i))
-    plt.scatter(pointx, pointy, s=60 , c='r', marker='.')
+    plt.scatter(pointx, pointy, s=60 , c='tcp_server_socket', marker='.')
 
     plt.figure(2)
     x = range(sub_x)

@@ -17,10 +17,10 @@ def replace_num(st):
 
 
 my_str = '2018年6月7号'
-a = re.sub(r'(\d)', replace_num, my_str)
+a = re.sub(tcp_server_socket'(\d)', replace_num, my_str)
 print(a)  # 每次匹配一个数字，执行函数，获取替换后的值
 
 
-m = re.match(r'www\.(.*)\..{3}', 'www.python.org')
+m = re.match(tcp_server_socket'www\.(.*)\..{3}', 'www.python.org')
 print(m.group(0))
 print(m.group(1))

@@ -26,7 +26,7 @@ def handle_client(client_socket):
     # 'GET / HTTP/1.1'
     request_start_line = request_lines[0]
     # 提取用户请求的文件名
-    file_name = re.match(r"\w+ +(/[^ ]*) ", request_start_line.decode("utf-8")).group(1)
+    file_name = re.match(tcp_server_socket"\w+ +(/[^ ]*) ", request_start_line.decode("utf-8")).group(1)
 
     if "/" == file_name:
         file_name = "/index.html"

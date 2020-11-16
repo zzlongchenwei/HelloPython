@@ -31,4 +31,4 @@ def producer(q):
     try:
         q.put(item, block=False)    # 当队列满的时候就执行其他代码
     except queue.Full:      # 比如输出一条日志信息并丢弃
-        log.warning('queued item %r discarded!', item)
+        log.warning('queued item %tcp_server_socket discarded!', item)
