@@ -4,23 +4,27 @@
 -剑衣沉沉晚霞归，酒杖津津神仙来-
 @author:chenwei
 @file:web_server.py
-@time:2020/11/15
+@time:2020/11/16
 """
+import importlib
 import socket
 import multiprocessing
 import re
-import mini_frame
-
+# import dynamic.mini_frame
+import sys
 
 class WSGIServer(object):
-    def __init__(self):
+    def __init__(self, port, app, static_path):
         # 1. 创建套接字
         self.tcp_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tcp_server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         # 2. 绑定
-        self.tcp_server_socket.bind(('', 7890))
+        self.tcp_server_socket.bind(('', port))
         # 3. 监听
         self.tcp_server_socket.listen(128)
+
+        self.application = app
+        self.static_path = static_path
 
     def service_client(self, new_socket):
         """为客户端返回数据"""
@@ -47,12 +51,12 @@ class WSGIServer(object):
         # 2.1 如果请求的资源不是以.py结尾，那么就认为是静态资源(html/css/js/png,jpg等)
         if not file_name.endswith(".py"):
             try:
-                f = open("./html" + file_name, "rb")
+                f = open(self.static_path + file_name, "rb")
             except:
                 response = "HTTP/1.1 404 NOT FOUND\r\n"
                 response += "\r\n"
                 response += "----- file not found?? ----"
-                new_socket.send(response.encode("utf-8"))
+                new_socket.send(response.encode('utf-8'))
             else:
                 html_content = f.read()
                 f.close()
@@ -63,7 +67,9 @@ class WSGIServer(object):
         else:
             # 2.2 如果是以.py结尾，那么就认为是动态资源的请求
             env = dict()
-            body = mini_frame.application(env, self.set_response_header)
+            env['PATH_INFO'] = file_name
+            # {'PATH_INFO': "/index.py"}
+            body = self.application(env, self.set_response_header)
 
             header = "HTTP/1.1 %s\r\n" % self.status
             for temp in self.headers:
@@ -73,7 +79,7 @@ class WSGIServer(object):
 
             response = header + body
             # 发送response给浏览器
-            new_socket.send(response.encode("utf-8"))
+            new_socket.send(response.encode('utf-8'))     # utf-8中文乱码
         # 关闭套接字
         new_socket.close()
 
@@ -98,7 +104,40 @@ class WSGIServer(object):
 
 def main():
     """控制整体，创建一个web服务器对象，然后调用这个对象的run_forever方法运行"""
-    wsgi_server = WSGIServer()
+    if len(sys.argv) == 3:
+        try:
+            port = int(sys.argv[1])     # 7890
+            frame_app_name = sys.argv[2]    # mini_frame:application
+        except Exception as ret:
+            print("---端口错误---")
+            return
+    else:
+        print("请按照以下方式运行")
+        print("python web_server.py 7890 mini_frame:application或者运行run.sh")
+        return
+
+    # mini_frame:application
+    ret = re.match(r"([^:]+):(.*)", frame_app_name)
+    if ret:
+        frame_name = ret.group(1)   # mini_frame
+        app_name = ret.group(2)     # application
+    else:
+        print("请按照以下方式运行")
+        print("python web_server.py 7890 mini_frame:application或者运行run.sh")
+        return
+    with open("./web_server.conf") as f:
+        conf_info = eval(f.read())
+
+    # conf_info是一个字典，里面数据为
+    # {
+    #     "static_path":".\static",
+    #     "dynamic_path":".\dynamic"
+    # }
+    sys.path.append(conf_info['dynamic_path'])
+    frame = importlib.import_module(frame_name) # 返回值标记这个导入的这个模块
+    app = getattr(frame, app_name)     # 此时app就指向了dynamic/mini_frame模块中的application
+    # print(app)
+    wsgi_server = WSGIServer(port, app, conf_info['static_path'])
     wsgi_server.run_forever()
 
 

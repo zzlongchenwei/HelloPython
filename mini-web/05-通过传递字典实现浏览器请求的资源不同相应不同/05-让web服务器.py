@@ -3,7 +3,7 @@
 """
 -剑衣沉沉晚霞归，酒杖津津神仙来-
 @author:chenwei
-@file:05-让web服务器.py
+@file:web_server.py
 @time:2020/11/16
 """
 import socket
@@ -52,7 +52,7 @@ class WSGIServer(object):
                 response = "HTTP/1.1 404 NOT FOUND\r\n"
                 response += "\r\n"
                 response += "----- file not found?? ----"
-                new_socket.send(response.encode("utf-8"))
+                new_socket.send(response.encode('utf-8'))
             else:
                 html_content = f.read()
                 f.close()
@@ -75,7 +75,7 @@ class WSGIServer(object):
 
             response = header + body
             # 发送response给浏览器
-            new_socket.send(response.encode('gbk'))
+            new_socket.send(response.encode('utf-8'))     # utf-8中文乱码
         # 关闭套接字
         new_socket.close()
 
