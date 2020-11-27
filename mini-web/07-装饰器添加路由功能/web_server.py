@@ -4,7 +4,7 @@
 -剑衣沉沉晚霞归，酒杖津津神仙来-
 @author:chenwei
 @file:web_server.py
-@time:2020/11/16
+@time:2020/11/22
 """
 import importlib
 import socket
@@ -48,8 +48,8 @@ class WSGIServer(object):
                 file_name = "/index.html"
 
         # 2. 返回http格式的数据，给浏览器
-        # 2.1 如果请求的资源不是以.py结尾，那么就认为是静态资源(html/css/js/png,jpg等)
-        if not file_name.endswith(".py"):
+        # 2.1 如果请求的资源不是以.html结尾，那么就认为是静态资源(css/js/png,jpg等)
+        if not file_name.endswith(".html"):
             try:
                 f = open(self.static_path + file_name, "rb")
             except:
@@ -79,7 +79,7 @@ class WSGIServer(object):
 
             response = header + body
             # 发送response给浏览器
-            new_socket.send(response.encode('utf-8'))     # utf-8中文乱码
+            new_socket.send(response.encode('utf-8'))
         # 关闭套接字
         new_socket.close()
 

@@ -63,11 +63,11 @@ class datanode:
 
     def write_online_user_info(self, online_user_info):
         """存储在线用户"""
-        with open('online_user.json','w') as online:
+        with open('online_user.json', 'w') as online:
             online.write(json.dumps(online_user_info))
 
     def read_online_user_info(self):
-        with open('online_user.json','r') as online:
+        with open('online_user.json', 'r') as online:
             online_user_info = json.loads(online.read())
         return online_user_info
 
