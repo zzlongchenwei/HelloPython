@@ -10,7 +10,10 @@
 import os
 import math
 import time
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, wait
+
+import numpy as np
+import base64
 
 
 # 获得文件大小
@@ -35,59 +38,78 @@ def get_chunk_size_chunk(chunksize, file_size):
 
 # 产生相应的分块文件
 def create_chunk_file(file_path, read_file, num):
-    file_name, file_format = file_path.split('.')
-    file_path = file_name + '_' + str(num)
-    with open('{path}'.format(path=file_path), 'wb') as subf:
-        print('file_path', file_path)
-
-        subf.write(read_file)
-
-
-# 根据分块数k，把文件分成k份
-def split_file(k, chunk_size, file_path):
-    """把文件分成k个子文件，并给序号名命"""
+    # try:
+    # file_name, file_format = file_path.split('.')
+    # file_path = file_name + '_D' + str(num)
+    # with open('{path}_D{num}'.format(path=file_path,num=num), 'wb') as subf:
     try:
-        with open('{path}'.format(path=file_path), 'rb') as wholef:
-            for i in range(k):
-                read_file = wholef.read(chunk_size)
-                create_chunk_file(file_path, read_file, i)
+        print('{path}_D{num}'.format(path=file_path, num=num))
+        print(read_file)
+        read_file = np.int(read_file)
+        print(read_file)
+
+        np.savetxt('{path}_D{num}'.format(path=file_path, num=num), read_file, encoding='utf-8')
+        # print('file_path', file_path)
+        # subf.write(read_file)
     except Exception as e:
-        print('文件不存在')
+        print('create_chunk_file分块时有问题')
 
 
 def threads_split_file(k, chunk_size, file_path):
     """把文件分成k个子文件，并给序号名命"""
     try:
         with open('{path}'.format(path=file_path), 'rb') as wholef:
-            with ThreadPoolExecutor(max_workers=k) as threadpool:
+            with ThreadPoolExecutor() as threadpool:
+                f_list = list()
                 for i in range(k):
                     read_file = wholef.read(chunk_size)
-                    threadpool.submit(create_chunk_file, file_path, read_file, i)
+                    future = threadpool.submit(create_chunk_file, file_path, read_file, i)
+                    f_list.append(future)
+            wait(f_list)
     except Exception as e:
-        print('文件不存在')
+        print('threads_split_file找不到要分块的文件')
+
 
 # 根据大小分
-def main(file_path):
+def data_segmentation(file_path, n=0, k=0):
+    """
+    :param file_path: 文件路径
+    :param n: 以多少MB分割文件，此时返回k
+    :param k: 把文件分割成几份，此时返回chunk_size
+    :return: k
+    """
     file_size = get_file_size(file_path)
     print(file_size, 'KB')
-    # k = 65
-    # chunk_size = get_chunk_size_k(k, file_size)
-    # print(chunk_size / MB, 'MB')
-    chunk_size = 6 * 1024 * 1024
-    k = get_chunk_size_chunk(chunk_size, file_size)
-    print(k, '块')
+    # chunk_size = 0
+    if k:
+        chunk_size = get_chunk_size_k(k, file_size)
+        print(chunk_size)
+        # return chunk_size
+    elif n:
+        chunk_size = n
+        k = get_chunk_size_chunk(chunk_size, file_size)
+        print(k, '块')
+        # return k
+    else:
+        raise Exception("请设定参数：以多少MB分块(n)，或者分几块(k)")
 
     # t0 = time.time()
     # split_file(k, chunk_size, file_path)
     # print('运行时间',time.time()-t0)
 
     # time.sleep(2)
-    t0 = time.time()
-    threads_split_file(k, chunk_size, file_path)
-    print('thread运行时间',time.time()-t0)
+    if chunk_size and k:
+        t0 = time.time()
+        try:
+            threads_split_file(k, chunk_size, file_path)
+        except:
+            print("分块错误")
+        print('分块完成，thread运行时间', time.time() - t0)
+        return k
+
 
 if __name__ == '__main__':
     MB = 1024 * 1024
     GB = MB * 1024
-    file_path = r'F:\WorkSpace\Hello-Python\ErasureCode\testfile\mateclass.flv'
-    main(file_path)
+    file_path = r'D:\WorkSpace\Hello-Python\ErasureCode\testfile\spiderman.jpg'
+    data_segmentation(file_path, k=1000)
